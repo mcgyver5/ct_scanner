@@ -1,12 +1,15 @@
 package mcgyver5.ct_scanner;
 
 import burp.ITab;
+import mcgyver5.ct_scanner.model.DomainObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class CTSearchTab implements ITab {
     private JTable domainTable;
+    private ArrayList<DomainObject> domainList;
 
     @Override
     public String getTabCaption() {
@@ -32,5 +35,9 @@ public class CTSearchTab implements ITab {
         splitPane.setTopComponent(topPane);
         splitPane.setBottomComponent(scrollPane);
         return splitPane;
+    }
+
+    public void setDomainList(ArrayList<DomainObject> domainList){
+        this.domainList = domainList;
     }
 }
