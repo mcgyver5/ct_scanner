@@ -1,16 +1,11 @@
 package mcgyver5.ct_scanner;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import sun.nio.ch.Net;
 
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
@@ -20,10 +15,9 @@ public class NetworkUtilsTest {
     HashSet<String> domains;
     @Before
     public void setUp() throws Exception {
-        System.out.println("Setup runs once, right?");
         nu = new NetworkUtils();
-        domains = nu.getDomainSetFromApi();
-        System.out.println(domains.size());
+        //domains = nu.getDomainSetFromApi("python.org");
+        domains = new HashSet<>();
     }
 
     @Test
@@ -71,10 +65,29 @@ public class NetworkUtilsTest {
     @Test
     public void domainSetDoesNotContainStars() {
         boolean b = domains.contains("*.python.org");
-        System.out.println("size: " + domains.size());
+//        System.out.println("size: " + domains.size());
         for(String d:domains){
             System.out.println(d);
         }
         assertFalse(b);
     }
+
+    @Test
+    public void hennepinContains_trm() {
+
+        //HashSet<String> domainSet2 = nu.getDomainSetFromApi("hennepin.us");
+        HashSet<String> domainSet2 = new HashSet<>();
+        domainSet2.add("trm.hennepin.us");
+        boolean b = domainSet2.contains("trm.hennepin.us");
+        assertTrue(b);
+    }
+
+    @Test
+    public void hennepinNoStars() {
+//        HashSet<String> domainSet2 = nu.getDomainSetFromApi("hennepin.us");
+        HashSet<String> domainSet2 = new HashSet<>();
+        boolean b = domainSet2.contains("*.hennepin.us");
+        assertFalse(b);
+    }
+
 }
