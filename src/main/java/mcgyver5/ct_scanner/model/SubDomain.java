@@ -1,6 +1,6 @@
 package mcgyver5.ct_scanner.model;
 
-public class DomainObject {
+public class SubDomain {
     private String IPAddress;
     private String domain;
     private boolean resolves;
@@ -9,7 +9,7 @@ public class DomainObject {
     private boolean selected;
     private boolean inScope;
 
-    public DomainObject(String IPAddress, String domain, boolean resolves, int httpStatus, int id, boolean selected, boolean inScope) {
+    public SubDomain(String IPAddress, String domain, boolean resolves, int httpStatus, int id, boolean selected, boolean inScope) {
         this.IPAddress = IPAddress;
         this.domain = domain;
         this.resolves = resolves;

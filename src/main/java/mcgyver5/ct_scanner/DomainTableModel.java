@@ -1,25 +1,25 @@
 package mcgyver5.ct_scanner;
 
+import mcgyver5.ct_scanner.model.SubDomain;
+
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class DomainTableModel extends AbstractTableModel {
+    int ID_COL = 0;
+    int SUB_DOMAIN_COL = 1;
+    int DNS_RESOLVES_COL = 2;
+    int HTTP_COL = 3;
+    int CHECKED_COL = 4;
     String[] columns = new String[]{"ID", "Subdomain", "DNS Resolves","HTTP Status","Checked"};
-    //my temp data:
-//    Object[][] data = new Object[][] {
-//            {121,"es.python.org","1.10.100.200",200,true},
-//            {122,"bugs.python.org","1.10.100.203",200,true},
-//            {123,"pypi.python.org","1.10.100.202",200,true},
-//            {124,"mail.python.org","1.10.100.201",200,true}
-//
-//    };
-    Object[][] data;
+    List<SubDomain> data;
 
     @Override
     public int getRowCount() {
-        return data.length;
+        return data.size();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class DomainTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        if(columnIndex == 4){
+        if(columnIndex == this.CHECKED_COL){
             return true;
         } else {
             return false;
@@ -48,15 +48,32 @@ public class DomainTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return data[rowIndex][columnIndex];
+        SubDomain subDomain = data.get(rowIndex);
+        switch(columnIndex) {
+            case 0:
+                return subDomain.getId();
+            case 1:
+                return subDomain.getDomain();
+            case 2:
+                return subDomain.getIPAddress();
+            case 3:
+                return subDomain.getHttpStatus();
+            case 4:
+                return subDomain.isSelected();
+        }
+            return null;
+
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        data[rowIndex][columnIndex] = aValue;
+
+        SubDomain sd = data.get(rowIndex);
+        if(columnIndex == this.CHECKED_COL){
+            sd.setSelected((boolean)aValue);
+        }
         fireTableCellUpdated(rowIndex,columnIndex);
     }
-
 
 
     @Override
@@ -69,7 +86,7 @@ public class DomainTableModel extends AbstractTableModel {
 
     }
 
-    public void setData(Object[][] data) {
-        this.data = data;
+    public void setData(List<SubDomain> domains){
+        this.data = domains;
     }
 }

@@ -1,10 +1,11 @@
 package mcgyver5.ct_scanner;
 
 import burp.ITab;
-import mcgyver5.ct_scanner.model.DomainObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -13,9 +14,12 @@ public class CTSearchTab implements ITab {
     private JTable domainTable;
     private ArrayList<String> domainList;
     private PrintWriter stdout;
+    private CTController controller;
 
-    public CTSearchTab(Object[][] data) {
-        this.data = data;
+   // public CTSearchTab(Object[][] data) {
+     public CTSearchTab(CTController controller){
+        this.controller = controller;
+        // this.data = data;
     }
 
     @Override
@@ -31,6 +35,12 @@ public class CTSearchTab implements ITab {
 
         JPanel topPane = new JPanel();
         JButton scopeButton = new JButton("Add Selected Domains To Scope");
+        scopeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.addSelectedToScope();
+            }
+        });
         JButton dnsButton = new JButton("Check if domains resolve");
         JButton saveButton = new JButton("Save Results");
         JButton httpButton = new JButton("Check HTTP Status");
@@ -38,9 +48,8 @@ public class CTSearchTab implements ITab {
         topPane.add(dnsButton);
         topPane.add(httpButton);
         topPane.add(saveButton);
-        this.stdout.println("about to add scrollpane + table");
         DomainTableModel tableModel = new DomainTableModel();
-        tableModel.setData(data);
+        tableModel.setData(controller.getData());
         JTable table = new JTable(tableModel);
 
         JScrollPane scrollPane = new JScrollPane(table);
