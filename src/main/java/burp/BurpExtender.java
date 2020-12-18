@@ -25,9 +25,10 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory {
         this.callbacks = callbacks;
         stdout = new PrintWriter(callbacks.getStdout(), true);
         stderr = new PrintWriter(callbacks.getStderr(), true);
-        stdout.println("Hello output v0.9.7");
+        stdout.println("Hello output v0.9.14");
         CTController controller = new CTController();
         controller.setCallbacks(this.callbacks);
+        controller.setStdOut(this.stdout);
         this.controller = controller;
         callbacks.issueAlert("Hello alerts");
 
@@ -53,6 +54,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory {
     public void createCTTab(IContextMenuInvocation iContextMenuInvocation){
         controller.lookupCT(iContextMenuInvocation);
         CTSearchTab ct_search_tab = new CTSearchTab(controller);
+        ct_search_tab.setStdOut(this.stdout);
         this.callbacks.addSuiteTab(ct_search_tab);
     }
 

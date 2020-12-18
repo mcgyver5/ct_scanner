@@ -11,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.xbill.DNS.*;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.*;
@@ -39,17 +40,18 @@ public class NetworkUtils {
     //DNS lookup
     //Save results
     //
-    public String dnsLookup(String domain) {
-        // return the IP address if DNS resolves.
+    public String dnsLookup(final String domain) {
+
         String r = "";
-        domain = domain.replace("*.", "");
+        String cleandomain = domain.replace("*.", "");
 
         try {
-            InetAddress result = InetAddress.getByName(domain);
+            InetAddress result = InetAddress.getByName(cleandomain);
             r = result.getHostAddress();
         } catch (UnknownHostException uhe) {
             r = "0";
         }
+
         return r;
     }
 

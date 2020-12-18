@@ -3,6 +3,7 @@ package mcgyver5.ct_scanner;
 import burp.*;
 import mcgyver5.ct_scanner.model.SubDomain;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -33,16 +34,17 @@ public class CTController {
     }
     public void setCallbacks(IBurpExtenderCallbacks callbacks) {
         this.callbacks = callbacks;
-        this.stdout = new PrintWriter(callbacks.getStdout());
     }
     // put create the tableModel and give it the data.
     public void lookupCT(IContextMenuInvocation context ) {
+        stdout.println("lookin up the domain!");
         NetworkUtils nu = null;
         IHttpRequestResponse[] traffic = context.getSelectedMessages();
         String domain = null;
         for(IHttpRequestResponse message : traffic){
             IHttpService service = message.getHttpService();
             String hostString = service.getHost();
+            hostString = hostString.toLowerCase();
             domain = hostString.replace("www.","");
         }
         HashSet<String> domainSet = null;
@@ -53,7 +55,7 @@ public class CTController {
         DataKeeper keeper = new DataKeeper();
         this.keeper = keeper;
         for(String domainString : domainList){
-            SubDomain subDomain = new SubDomain("",domainString,false, 0,id,false,false);
+            SubDomain subDomain = new SubDomain("",domainString,false, 0,id,true,false);
             keeper.addSubdomain(subDomain);
             id = id + 1;
         }
@@ -72,5 +74,26 @@ public class CTController {
                 }
             }
         }
+    }
+
+    public void resolveSelected() {
+        NetworkUtils nu = new NetworkUtils();
+        for(SubDomain sd : keeper.getDomains()){
+            if(sd.isSelected()){
+                String address = nu.dnsLookup(sd.getDomain());
+                sd.setIPAddress(address);
+
+            }
+
+        }
+    }
+
+
+    public void setStdOut(PrintWriter stdout) {
+        this.stdout = stdout;
+    }
+
+    public void checkReachable()    {
+
     }
 }
